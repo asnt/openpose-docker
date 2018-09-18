@@ -1,0 +1,25 @@
+#!/bin/bash
+
+usage() {
+  echo "Usage: $0 image_dir output_dir model_dir"
+}
+
+[[ "$#" -ne "3" ]] && usage && exit 1
+image_dir=$(readlink -f $1)
+output_dir=$(readlink -f $2)
+model_dir=$(readlink -f $3)
+
+nvidia-docker run -it \
+  -v "$model_dir":/models \
+  -v "$image_dir":/input \
+  -v "$output_dir":/output \
+  openpose-cuda9 \
+  /openpose/build/examples/openpose/openpose.bin \
+  -hand \
+  -face \
+  -image_dir /input \
+  -write_images /output \
+  -write_json /output \
+  -model_folder /models \
+  -model_pose COCO \
+  -display 0

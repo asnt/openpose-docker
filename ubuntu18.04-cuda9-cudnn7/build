@@ -1,0 +1,5 @@
+#!/bin/bash
+
+time docker build \
+  -t openpose-cuda9 . \
+  --build-arg NPROC=$(nproc)
